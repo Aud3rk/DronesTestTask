@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6358540328262159295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5171542848402937894}
+  - component: {fileID: 4271535711364050429}
+  - component: {fileID: 9080293253566389396}
+  m_Layer: 0
+  m_Name: Services
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5171542848402937894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358540328262159295}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 27.34652, y: -55.971058, z: -31.970013}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4271535711364050429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358540328262159295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc073233b84b45a3a14ec381dd812d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redSpawnPoint: {fileID: 0}
+  blueSpawnPoint: {fileID: 0}
+  lowPoint: {fileID: 0}
+  highPoint: {fileID: 0}
+  uiController: {fileID: 9080293253566389396}
+--- !u!114 &9080293253566389396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358540328262159295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f0e75e8ca47e6249a166ec941a55fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 0}
+  textBarCount: {fileID: 0}
+  textBarSpeed: {fileID: 0}
+  textBlueTeam: {fileID: 0}
+  textRedTeam: {fileID: 0}
+  droneCountSlider: {fileID: 0}
+  droneSpeedSlider: {fileID: 0}
+  toggleGizmo: {fileID: 0}
+  toggleScore: {fileID: 0}
+  ScoreMenu: {fileID: 0}
