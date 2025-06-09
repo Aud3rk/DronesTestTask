@@ -12,6 +12,7 @@ namespace Drones
         public event Action<Loot> TookLoot;
     
         [SerializeField] private LootDetector lootDetector;
+        [SerializeField] private float _range =1f;
     
         protected NavMeshAgent _navMeshAgent;
     
@@ -38,14 +39,13 @@ namespace Drones
 
         private void Update()
         {
-            if (Vector3.Distance(transform.position, _navMeshAgent.destination) <= 0.8f)
+            if (Vector3.Distance(transform.position, _navMeshAgent.destination) <= _range)
             {
                 if(_isDelivering)
                     UnloadLoot();
                 if(_isSearching)
                     StartSearchingLoot();
             }
-            
         }
 
         private void OnTriggerEnter(Collider other)

@@ -19,7 +19,7 @@ public class LootSpawner
         for (int i = 0; i < count; i++)
         {
             var prefab = Resources.Load<GameObject>("Prefabs/Loot");
-            var go = Object.Instantiate(prefab, RandomExts.GeneratePoint(_lowPoint, _highPoint) ,Quaternion.identity);
+            var go = Object.Instantiate(prefab, RandomExts.GeneratePoint(_lowPoint, _highPoint) , prefab.transform.rotation);
             var lootComponent = go.GetComponent<Loot>();
             lootComponent.Init(5,10);
             lootComponent.gameObject.name = i.ToString();
