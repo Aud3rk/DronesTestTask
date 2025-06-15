@@ -10,94 +10,60 @@ namespace Drones
     {
         public event Action<int> Unload;
         public event Action<Loot> TookLoot;
-    
-        [SerializeField] private LootDetector lootDetector;
-        [SerializeField] private float _range =1f;
-    
         protected NavMeshAgent _navMeshAgent;
-    
-        private Vector3 _basePosition;
-        private Vector3 _lowPoint;
-        private Vector3 _highPoint;
 
-        private bool _isSearching = false;
-        private bool _isDelivering = false;
-        private int _countDelivery =0;
-        private BaseStation _base;
-        private bool isMovingToTarget=false;
+        [SerializeField] private LootDetector lootDetector;
+        [SerializeField] private float _range = 1f;
+
+        private DroneStateMachine _droneStateMachine;
+        private int _countDelivery;
 
         public void Init(Vector3 lowPoint, Vector3 highPoint, Vector3 basePosition, BaseStation baseStation)
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
-            _lowPoint = lowPoint;
-            _highPoint = highPoint;
-            _basePosition = basePosition;
-            _base = baseStation;
+            _droneStateMachine = new DroneStateMachine(this, _navMeshAgent, _range, lowPoint, highPoint, baseStation, 
+                basePosition, lootDetector);
             lootDetector.FoundLoot += TryToSwitchTarget;
-            
         }
 
-        private void Update()
-        {
-            if (Vector3.Distance(transform.position, _navMeshAgent.destination) <= _range)
-            {
-                if(_isDelivering)
-                    UnloadLoot();
-                if(_isSearching)
-                    StartSearchingLoot();
-            }
-        }
+        private void Update() => 
+            _droneStateMachine.Tick();
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_isDelivering)
+            if (_droneStateMachine.GetActiveState().GetType()==typeof(HuntingState))
             {
                 var loot = other.GetComponent<Loot>();
-                _navMeshAgent.destination = transform.position;
                 _countDelivery = loot.Take();
+                _droneStateMachine.Enter<LootingState, Loot>(loot);
                 TookLoot?.Invoke(loot);
                 Destroy(loot.gameObject);
                 StartCoroutine(LootResource());
             }
         }
 
-        public void StartSearchingLoot()
-        {
-            _isSearching = true;
-            _isDelivering = false;
-            isMovingToTarget = false;
-            _navMeshAgent.destination = RandomExts.GeneratePoint(_lowPoint, _highPoint);
-            lootDetector.FindLoot();
-        }
+        public void StartSearchingLoot() => 
+            _droneStateMachine.Enter<SearchingState>();
 
-        public void SetSpeed(int speed) => 
+        public void SetSpeed(int speed) =>
             _navMeshAgent.speed = speed;
 
-        private void UnloadLoot()
-        {
-            Unload?.Invoke(_countDelivery);
-            _isDelivering = false;
-            StartSearchingLoot();
-        }
+        public void UnloadLoot(int countDelivery) => 
+            Unload?.Invoke(countDelivery);
 
-        private IEnumerator LootResource()
+        public IEnumerator LootResource()
         {
             yield return new WaitForSeconds(2f);
-            _isDelivering = true;
-            _navMeshAgent.destination = _basePosition;
+            _droneStateMachine.Enter<DeliveringState, int>(_countDelivery);
         }
 
         private void TryToSwitchTarget(Loot loot)
         {
-            if (_base.TryToLoot( loot, this)&&!isMovingToTarget&&!_isDelivering)
-            {
-                _isSearching = false;
-                isMovingToTarget = false;
-                _navMeshAgent.destination = loot.transform.position;
-            }
+            if(_droneStateMachine.GetActiveState().GetType()==typeof(SearchingState))
+                _droneStateMachine.Enter<HuntingState, Loot>(loot);
         }
 
-        private void OnDestroy() => 
+        private void OnDestroy() =>
             lootDetector.FoundLoot -= TryToSwitchTarget;
     }
 }
